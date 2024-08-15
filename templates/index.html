@@ -1,40 +1,113 @@
-<h2>Ethereum DApp</h2>
-<input type="number" id="moneyInput" placeholder="Enter amount to store">
-<button class="btn" onclick="storeValue()">Store Value</button>
-<button class="btn" onclick="getValue()">Get Stored Value</button>
-<p id="storedValue"></p>
-<p id="status"></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum DApp</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-<script src=" https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ethereum DApp</h2>
+    <input type="number" id="moneyInput" placeholder="Enter amount to store">
+    <button class="btn" onclick="storeValue()">Store Value</button>
+    <button class="btn" onclick="getValue()">Get Stored Value</button>
+    <p id="storedValue"></p>
+    <p id="status"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
 <script>
     const contractAddress = '0xC7a060220A8449Fea55CFcE694b632f20D179f4C';
     const contractABI = [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "num",
-				"type": "uint256"
-			}
-		],
-		"name": "store",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "viewnum",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "num",
+                    "type": "uint256"
+                }
+            ],
+            "name": "store",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "viewnum",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
     ];
 
     const web3 = new Web3(Web3.givenProvider);
@@ -43,14 +116,17 @@
     async function storeValue() {
         const accounts = await web3.eth.requestAccounts();
         const value = document.getElementById('moneyInput').value;
-        console.log("value: " + value);
-        console.log("accounts[0] " + accounts[0]);
+        console.log("Value: " + value);
+        console.log("Account: " + accounts[0]);
         await contract.methods.store(value).send({from: accounts[0]});
     }
 
     async function getValue() {
         const storedValue = await contract.methods.viewnum().call();
-        console.log("stored value " + storedValue);
+        console.log("Stored value: " + storedValue);
         document.getElementById('storedValue').innerText = "Stored Value: " + storedValue;
     }
 </script>
+
+</body>
+</html>
