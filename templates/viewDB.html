@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DApp - Store and Transfer Money</title>
+    <title>User Data</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -71,25 +71,15 @@
 </head>
 <body>
     <div id="particles-js"></div>
+
     <div class="container">
-        <h2>Main menu</h2>
-        <h2>Hi, {{r}}, how can I help you today?</h2>
+        <h2>User Data</h2>
+        {{r}}
         <br>
-        <form action="/store_money" method="post">
-            <input type="submit" value="Store Money" class="btn">
+        <form action="/main" method="post">
+            <input type="submit" value="Main">
         </form>
         <br>
-        <form action="/transfer_money" method="post">
-            <input type="submit" value="Transfer Money" class="btn">
-        </form>
-        <br>
-        <form action="/admin" method="post">
-            <input type="submit" value="admin" class="btn">
-        </form>
-        <br>
-        <form action="/" method="post">
-            <input type="submit" value="Logout" class="btn">
-        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
