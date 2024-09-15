@@ -7,105 +7,96 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, #00b4db, #0083b0);
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            overflow: hidden;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
         .container {
-            background-color: white;
-            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(10px);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+            margin: 15vh auto;
         }
         .container:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
         h2 {
-            color: #1a73e8;
-            text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 30px;
             font-size: 24px;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            font-size: 1rem;
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
             transition: border-color 0.3s ease;
         }
         input:focus {
-            border-color: #1a73e8;
+            border-color: #ffffff;
             outline: none;
         }
         .btn {
-            background-color: #1a73e8;
-            color: white;
+            background: linear-gradient(45deg, #ff6b6b, #f94d6e);
+            color: #fff;
+            padding: 12px 20px;
             border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 1rem;
-            width: 100%;
-            margin-bottom: 1rem;
-            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
+            font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
         }
         .btn:hover {
-            background-color: #1557b0;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #f94d6e, #ff6b6b);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
         .btn:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
         }
         .transaction-info {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            border-left: 5px solid #1a73e8;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 5px solid #ff6b6b;
         }
         .transaction-info p {
-            margin: 0.5rem 0;
-            color: #333;
+            margin: 10px 0;
+            color: #ffffff;
             font-weight: bold;
-        }
-        form input[type="submit"] {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            width: 100%;
-            margin-top: 1rem;
-            transition: background-color 0.3s, transform 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        form input[type="submit"]:hover {
-            background-color: #e85a5a;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        form input[type="submit"]:active {
-            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
+    <div id="particles-js"></div>
+
     <div class="container">
         <h2>Transfer Money v1</h2>
         <input type="text" id="payer_id" placeholder="Please enter payer address">
@@ -119,121 +110,45 @@
             <p id="view_amount_id"></p>
 
             <form action="/" method="post">
-                <input type="submit" value="Main">
+                <input type="submit" value="Main" class="btn">
             </form>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <script>
         // Your existing JavaScript code here
-        const contract_address = "0x83af01cb8ff4056b4d7229cd5e59371edb268a5a";
-        const contract_abi = [
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "num",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "payee_address",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "payer_address",
-                        "type": "address"
-                    }
-                ],
-                "name": "linepay",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
+        
+        // Particles.js config
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+                "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
             },
-            {
-                "inputs": [],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            },
-            {
-                "inputs": [],
-                "name": "check_transaction",
-                "outputs": [
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
-
-        let web3;
-        let contract;
-
-        async function init() {
-            if (typeof window.ethereum !== 'undefined') {
-                web3 = new Web3(window.ethereum);
-                try {
-                    await window.ethereum.enable();
-                    contract = new web3.eth.Contract(contract_abi, contract_address);
-                    console.log("Web3 initialized:", web3);
-                    console.log("Contract initialized:", contract);
-                } catch (error) {
-                    console.error("User denied account access:", error);
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
+                    "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                    "repulse": { "distance": 200, "duration": 0.4 },
+                    "push": { "particles_nb": 4 },
+                    "remove": { "particles_nb": 2 }
                 }
-            } else {
-                console.log('Please install MetaMask!');
-            }
-        }
-
-        async function transfer() {
-            try {
-                const accounts = await web3.eth.getAccounts();
-                console.log("Accounts:", accounts);
-                const payer_address = document.getElementById("payer_id").value;
-                const payee_address = document.getElementById("payee_id").value;
-                const amount = document.getElementById("amount_id").value;
-                console.log("Transfer details:", payer_address, payee_address, amount);
-                await contract.methods.linepay(amount, payee_address, payer_address).send({from: accounts[0]});
-                console.log("Transfer successful");
-            } catch (error) {
-                console.error("Transfer failed:", error);
-            }
-        }
-
-        async function view_transaction() {
-            try {
-                const result = await contract.methods.check_transaction().call();
-                const payer_address = result[0];
-                const payee_address = result[1];
-                const amount = result[2];
-
-                document.getElementById("view_payer_id").innerText = "Payer: " + payer_address;
-                document.getElementById("view_payee_id").innerText = "Payee: " + payee_address;
-                document.getElementById("view_amount_id").innerText = "Amount: " + amount;
-            } catch (error) {
-                console.error("Failed to view transaction:", error);
-            }
-        }
-
-        // Initialize Web3 when the page loads
-        window.addEventListener('load', init);
+            },
+            "retina_detect": true
+        });
     </script>
 </body>
 </html>
